@@ -121,10 +121,11 @@ class Exp(BaseExp):
 
         if is_distributed:
             batch_size = batch_size // dist.get_world_size()
-
-        sampler = InfiniteSampler(
-            len(self.dataset), seed=self.seed if self.seed else 0
-        )
+            sampler = InfiniteSampler(
+                len(self.dataset), seed=self.seed if self.seed else 0
+            )
+        else:
+            sampler = torch.utils.data.RandomSampler(self.dataset)
 
         batch_sampler = YoloBatchSampler(
             sampler=sampler,
